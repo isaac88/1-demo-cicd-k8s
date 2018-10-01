@@ -1,5 +1,7 @@
 #!/usr/bin/groovy
 
+import java.text.SimpleDateFormat
+
 pipeline {
     agent {
         kubernetes {
