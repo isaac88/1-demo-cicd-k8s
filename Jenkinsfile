@@ -1,11 +1,30 @@
+#!/usr/bin/groovy
+
 pipeline {
-    agent any 
+    agent {
+        kubernetes {
+            cloud "kubernetes"
+            label "go-demo-5-build"
+            serviceAccount "build"
+            yamlFile "KubernetesPod.yaml"
+        }
+    }
+    environment {
+        image = "vfarcic/go-demo-5"
+        project = "go-demo-5"
+        domain = "54.76.149.175.nip.io"
+        cmAddr = "cm.54.76.149.175.nip.io"
+    }
     stages {
         stage('Build') {
             steps {
                 echo 'Build Step'
-		echo "Running ${env.BUILD_ID} on ${env.JENKINS_URL}" 
-
+                container("golang") {
+                    script {
+                        currentBuild.displayName = new SimpleDateFormat("yy.MM.dd").format(new Date()) + "-${env.BUILD_NUMBER}"
+                    }
+                    k8sBuildGolang("go-demo")
+                }
             }
         }
         stage('Test') {
