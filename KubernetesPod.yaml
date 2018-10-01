@@ -1,6 +1,7 @@
 apiVersion: v1
 kind: Pod
 metadata:
+  name: build
   namespace: go-demo-5-build
 spec:
   containers:
