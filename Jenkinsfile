@@ -6,13 +6,13 @@ pipeline {
     agent {
         kubernetes {
             cloud "kubernetes"
-            label "go-demo-5-build"
+            label "go-demo-cicd-k8s-1-build"
             yamlFile "KubernetesPod.yaml"
         }
     }
     environment {
-        image = "vfarcic/go-demo-5"
-        project = "go-demo-5"
+        image = "isaac88/go-demo-5"
+        project = "go-demo-cicd-k8s-1"
         domain = "54.76.149.175.nip.io"
         cmAddr = "cm.54.76.149.175.nip.io"
     }
@@ -22,11 +22,12 @@ pipeline {
                 echo 'Build Step'
                 container("golang") {
                     script {
+                         // Change Build Name Ex: #18 to
                         currentBuild.displayName = new SimpleDateFormat("yy.MM.dd").format(new Date()) + "-${env.BUILD_NUMBER}"
                     }
                     k8sBuildGolang("go-demo")
                 }
-                
+
                 container("docker") {
                   k8sBuildImageBeta(image, false)
                 }
