@@ -5,7 +5,7 @@ import java.text.SimpleDateFormat
 pipeline {
     agent {
         kubernetes {
-            cloud "kubernetes"
+            cloud "go-demo-5-build"
             label "go-demo-5-build"
             serviceAccount "build"
             yamlFile "KubernetesPod.yaml"
@@ -25,7 +25,7 @@ pipeline {
                     script {
                         currentBuild.displayName = new SimpleDateFormat("yy.MM.dd").format(new Date()) + "-${env.BUILD_NUMBER}"
                     }
-                    
+
                     k8sBuildGolang("go-demo")
                 }
             }
