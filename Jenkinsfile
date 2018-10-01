@@ -5,7 +5,7 @@ import java.text.SimpleDateFormat
 pipeline {
     agent {
         kubernetes {
-            cloud "go-demo-5-build"
+            cloud "kubernetes"
             label "go-demo-5-build"
             serviceAccount "build"
             yamlFile "KubernetesPod.yaml"
