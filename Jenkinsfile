@@ -8,6 +8,7 @@ pipeline {
             cloud "kubernetes"
             label "go-demo-5-build"
             serviceAccount "build"
+            namespace "namespace"
             yamlFile "KubernetesPod.yaml"
         }
     }
