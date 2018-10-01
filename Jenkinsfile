@@ -11,7 +11,7 @@ pipeline {
         }
     }
     environment {
-        image = "isaac88/go-demo-5"
+        image = "isaac88/go-demo-cicd-k8s-1-build"
         project = "go-demo-cicd-k8s-1"
         domain = "54.76.149.175.nip.io"
         cmAddr = "cm.54.76.149.175.nip.io"
