@@ -22,7 +22,7 @@ pipeline {
                 echo 'Build Step'
                 container("golang") {
                     script {
-                         // Change Build Name Ex: #18 to
+                         // Change Build Name Ex: #18 to #18.10.01-18
                         currentBuild.displayName = new SimpleDateFormat("yy.MM.dd").format(new Date()) + "-${env.BUILD_NUMBER}"
                     }
                     k8sBuildGolang("go-demo")
