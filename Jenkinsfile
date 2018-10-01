@@ -26,6 +26,7 @@ pipeline {
                     }
                     k8sBuildGolang("go-demo")
                 }
+                
                 container("docker") {
                   k8sBuildImageBeta(image, false)
                 }
