@@ -53,11 +53,11 @@ pipeline {
                 echo 'Bake Step'
             }
         } */
-        stage('Contract') {
+        /* stage('Contract') {
             steps {
                 echo 'Contract Step'
             }
-        }
+        } */
         stage('Store') {
             steps {
                 echo 'Store Step'
