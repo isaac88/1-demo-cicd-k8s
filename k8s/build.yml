@@ -2,9 +2,7 @@ apiVersion: v1
 kind: Namespace
 metadata:
   name: go-demo-cicd-k8s-1-build
-
 ---
-
 apiVersion: v1
 kind: ServiceAccount
 metadata:
@@ -32,9 +30,7 @@ subjects:
   - kind: ServiceAccount
     name: build
     namespace: default
-
 ---
-
 apiVersion: v1
 kind: LimitRange
 metadata:
@@ -55,9 +51,7 @@ spec:
       memory: 10Mi
       cpu: 0.05
     type: Container
-
 ---
-
 apiVersion: v1
 kind: ResourceQuota
 metadata:
