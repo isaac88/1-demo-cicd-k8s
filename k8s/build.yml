@@ -1,14 +1,15 @@
 apiVersion: v1
-kind: ServiceAccount
+kind: Namespace
 metadata:
-  name: build
-  namespace: default
+  name: go-demo-cicd-k8s-1-build
+
 ---
+
 apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: build
-  namespace: kube-system
+  namespace: go-demo-cicd-k8s-1-build
 ---
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRoleBinding
@@ -21,17 +22,15 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: build
-    namespace: default
-  - kind: ServiceAccount
-    name: build
-    namespace: kube-system
+    namespace: go-demo-cicd-k8s-1-build
+
 ---
 
 apiVersion: v1
 kind: LimitRange
 metadata:
   name: build
-  namespace: default
+  namespace: go-demo-cicd-k8s-1-build
 spec:
   limits:
   - default:
@@ -54,7 +53,7 @@ apiVersion: v1
 kind: ResourceQuota
 metadata:
   name: build
-  namespace: default
+  namespace: go-demo-cicd-k8s-1-build
 spec:
   hard:
     requests.cpu: 2
