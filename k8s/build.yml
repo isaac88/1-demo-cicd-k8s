@@ -11,6 +11,12 @@ metadata:
   name: build
   namespace: go-demo-cicd-k8s-1-build
 ---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: build
+  namespace: default
+---
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRoleBinding
 metadata:
@@ -23,6 +29,9 @@ subjects:
   - kind: ServiceAccount
     name: build
     namespace: go-demo-cicd-k8s-1-build
+  - kind: ServiceAccount
+    name: build
+    namespace: default
 
 ---
 
