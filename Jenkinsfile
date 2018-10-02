@@ -7,7 +7,7 @@ pipeline {
         kubernetes {
             cloud "kubernetes"
             label "go-demo-cicd-k8s-1-build"
-            serviceAccount "default"
+            serviceAccount "default-view"
             yamlFile "KubernetesPod.yaml"
         }
     }
