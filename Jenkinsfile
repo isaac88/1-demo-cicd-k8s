@@ -48,11 +48,11 @@ pipeline {
                 echo 'Versionate Step'
             }
         }
-        stage('Bake') {
+        /* stage('Bake') {
             steps {
                 echo 'Bake Step'
             }
-        }
+        } */
         stage('Contract') {
             steps {
                 echo 'Contract Step'
