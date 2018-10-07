@@ -38,7 +38,7 @@ pipeline {
         stage("func-test") {
             steps {
                 container("helm") {
-                    k8sUpgradeBeta(project, domain, "--set replicaCount=2 --set dbReplicaCount=1")
+                    k8sUpgradeBeta(project, domain, "--set replicaCount=2 --set dbReplicaCount=1", museumAddr)
                 }
                 container("kubectl") {
                     k8sRolloutBeta(project)
