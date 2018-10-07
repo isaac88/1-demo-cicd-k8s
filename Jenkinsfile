@@ -12,10 +12,11 @@ pipeline {
         }
     }
     environment {
-        image = "isaac88/go-demo-cicd-k8s-1-build"
-        project = "go-demo-cicd-k8s-1"
-        domain = "54.76.149.175.nip.io"
-        cmAddr = "cm.54.76.149.175.nip.io"
+        image       = "isaac88/go-demo-cicd-k8s-1-build"
+        project     = "go-demo-cicd-k8s-1"
+        domain      = "54.76.149.175.nip.io"
+        cmAddr      = "cm.54.76.149.175.nip.io"
+        museumAddr  = "chartmuseum-chartmuseum:8080"
     }
     stages {
         stage('build') {
@@ -53,6 +54,19 @@ pipeline {
                 }
             }
           }
+        }
+        stage("release") {
+            when {
+                branch "master"
+            }
+            steps {
+                container("docker") {
+                    k8sPushImage(image, false)
+                }
+                container("helm") {
+                    k8sPushHelm(project, "", museumAddr, true, true)
+                }
+            }
         }
     }
 }
