@@ -7,65 +7,65 @@ pipeline {
         kubernetes {
             cloud "kubernetes"
             label "go-demo-cicd-k8s-1-build"
+            serviceAccount "build"
             yamlFile "KubernetesPod.yaml"
         }
     }
     environment {
-        image = "isaac88/go-demo-cicd-k8s-1-build"
-        project = "go-demo-cicd-k8s-1"
-        domain = "54.76.149.175.nip.io"
-        cmAddr = "cm.54.76.149.175.nip.io"
+        image       = "isaac88/go-demo-cicd-k8s-1-build"
+        project     = "go-demo-cicd-k8s-1"
+        domain      = "54.76.149.175.nip.io"
+        cmAddr      = "cm.54.76.149.175.nip.io"
+        museumAddr  = "chartmuseum-chartmuseum:8080"
     }
     stages {
-        stage('Build') {
+        stage('build') {
             steps {
-                echo 'Build Step'
                 container("golang") {
                     script {
                          // Change Build Name Ex: #18 to #18.10.01-18
                         currentBuild.displayName = new SimpleDateFormat("yy.MM.dd").format(new Date()) + "-${env.BUILD_NUMBER}"
                     }
+                    // Build the code
                     k8sBuildGolang("go-demo")
                 }
-
+                // Build a docker image with the compiled code and push to docker registry
                 container("docker") {
                   k8sBuildImageBeta(image, false)
                 }
             }
         }
-        stage('Test') {
+        stage("func-test") {
             steps {
-                echo 'Test Step'
+                container("helm") {
+                    k8sUpgradeBeta(project, domain, "--set replicaCount=2 --set dbReplicaCount=1")
+                }
+                container("kubectl") {
+                    k8sRolloutBeta(project)
+                }
+                container("golang") {
+                    k8sFuncTestGolang(project, domain)
+                }
             }
-        }
-        stage('Sonar') {
-            steps {
-                echo 'Sonar Step'
+          post {
+            always {
+                container("helm") {
+                    k8sDeleteBeta(project)
+                }
             }
+          }
         }
-        stage('Versionate') {
-            steps {
-                echo 'Versionate Step'
+        stage("release") {
+            when {
+                branch "master"
             }
-        }
-        stage('Bake') {
             steps {
-                echo 'Bake Step'
-            }
-        }
-        stage('Contract') {
-            steps {
-                echo 'Contract Step'
-            }
-        }
-        stage('Store') {
-            steps {
-                echo 'Store Step'
-            }
-        }
-        stage('Deploy') {
-            steps {
-                echo 'Deploy Step'
+                container("docker") {
+                    k8sPushImage(image, false)
+                }
+                container("helm") {
+                    k8sPushHelm(project, "", museumAddr, true, true)
+                }
             }
         }
     }
